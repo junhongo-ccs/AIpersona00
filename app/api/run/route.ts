@@ -1,5 +1,6 @@
-// ==== RUN API (Cheerioベース最小版) ====
+// ==== RUN API (Cheerioベース) ====
 // Playwrightを使わず、HTMLを fetch + cheerio で要約して LLM に投げます。
+
 
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
