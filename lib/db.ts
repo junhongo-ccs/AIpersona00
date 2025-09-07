@@ -1,48 +1,23 @@
-import Database from "better-sqlite3";
+// 依存不要の簡易DB（JSON）版。Replitでも安定して動きます。
 import fs from "fs";
 import path from "path";
 
-const OUT_DIR = path.join(process.cwd(), "out");
-if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });
+const OUT = path.join(process.cwd(), "out");
+if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
+const FILE = path.join(OUT, "chatlogs.json");
 
-const db = new Database(path.join(OUT_DIR, "chatlogs.db"));
-
-db.prepare(`
-CREATE TABLE IF NOT EXISTS chat_logs (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  timestamp TEXT,
-  persona TEXT,
-  url TEXT,
-  utterance TEXT,
-  next_action TEXT,
-  friction_score INTEGER
-)`).run();
-
-export type ChatRow = {
-  id: number;
-  timestamp: string;
-  persona: string;
-  url: string;
-  utterance: string;
-  next_action: string;
-  friction_score: number;
+type Row = {
+  id: number; timestamp: string; persona: string; url: string;
+  utterance: string; next_action: string; friction_score: number;
 };
 
-export function insertLog(p: {
-  persona: string;
-  url: string;
-  utterance: string;
-  next_action: string;
-  friction_score: number;
-}) {
-  const stmt = db.prepare(`
-    INSERT INTO chat_logs (timestamp, persona, url, utterance, next_action, friction_score)
-    VALUES (?, ?, ?, ?, ?, ?)
-  `);
-  stmt.run(new Date().toISOString(), p.persona, p.url, p.utterance, p.next_action, p.friction_score);
-}
+function readAll(): Row[] { try { return JSON.parse(fs.readFileSync(FILE,"utf-8")); } catch { return []; } }
+function writeAll(rows: Row[]) { fs.writeFileSync(FILE, JSON.stringify(rows, null, 2)); }
 
-export function getLogs(limit = 20): ChatRow[] {
-  const stmt = db.prepare(`SELECT * FROM chat_logs ORDER BY id DESC LIMIT ?`);
-  return stmt.all(limit) as ChatRow[];
+export function insertLog(p:{persona:string;url:string;utterance:string;next_action:string;friction_score:number;}) {
+  const rows = readAll();
+  const id = (rows[0]?.id || 0) + 1;
+  rows.unshift({ id, timestamp: new Date().toISOString(), ...p });
+  writeAll(rows);
 }
+export function getLogs(limit=20){ return readAll().slice(0, limit); }
