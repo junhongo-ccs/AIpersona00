@@ -10,7 +10,7 @@ channel = "stable-24_11"
 packages = ["chromium", "glib", "nss", "nspr", "dbus", "atk", "at-spi2-atk", "cups", "libdrm", "xorg.libxcb", "libxkbcommon", "at-spi2-core", "xorg.libX11", "xorg.libXcomposite", "xorg.libXdamage", "xorg.libXext", "xorg.libXfixes", "xorg.libXrandr", "mesa", "pango", "cairo", "alsa-lib"]
 
 [deployment]
-build = ["npm", "install", "&&", "npm", "run", "build"]
+build = ["npm", "run", "build"]
 run = ["npm", "start"]
 deploymentTarget = "autoscale"
 
