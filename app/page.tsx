@@ -49,19 +49,50 @@ export default function Page() {
     setErr("");
     setStatus("Running");
     setData(null);
+    
+    // AbortControllerでタイムアウト制御
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30秒でタイムアウト
+    
     try {
       const res = await fetch("/api/run", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url, personaId })
+        body: JSON.stringify({ url, personaId }),
+        signal: controller.signal
       });
+      
+      clearTimeout(timeoutId);
+      
+      if (!res.ok) {
+        const errorText = await res.text();
+        let errorMsg = "リクエストが失敗しました";
+        try {
+          const errorJson = JSON.parse(errorText);
+          errorMsg = errorJson.error || errorMsg;
+        } catch {
+          if (errorText.includes("timeout")) {
+            errorMsg = "処理がタイムアウトしました。URLが正しいか、またはサイトの応答が遅い可能性があります。";
+          }
+        }
+        throw new Error(errorMsg);
+      }
+      
       const j: RunResp = await res.json();
-      if (!res.ok) throw new Error(j.error || "failed");
       setData(j);
       setStatus("Done");
       await loadLogs();
     } catch (e: any) {
-      setErr(String(e?.message || e));
+      clearTimeout(timeoutId);
+      let errorMsg = String(e?.message || e);
+      
+      if (e.name === 'AbortError') {
+        errorMsg = "処理がタイムアウトしました（30秒）。URLを確認するか、しばらく待ってから再試行してください。";
+      } else if (errorMsg.includes("Failed to fetch")) {
+        errorMsg = "ネットワークエラーが発生しました。接続を確認してください。";
+      }
+      
+      setErr(errorMsg);
       setStatus("Error");
     }
   }
@@ -137,9 +168,32 @@ export default function Page() {
           </div>
         </div>
 
-        <div style={{marginTop: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center'}}>
-          <button style={{display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: '0.75rem', padding: '0.75rem 1.5rem', fontWeight: '500', background: '#111213', color: 'white', border: 'none', cursor: 'pointer', fontSize: '1rem'}} onClick={run}>生成する</button>
-          {err && <div style={{color: '#be123c', fontSize: '0.95rem'}}>{err}</div>}
+        <div style={{marginTop: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap'}}>
+          <button 
+            style={{
+              display: 'inline-flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              borderRadius: '0.75rem', 
+              padding: '0.75rem 1.5rem', 
+              fontWeight: '500', 
+              background: status === 'Running' ? '#9ca3af' : '#111213', 
+              color: 'white', 
+              border: 'none', 
+              cursor: status === 'Running' ? 'not-allowed' : 'pointer', 
+              fontSize: '1rem',
+              opacity: status === 'Running' ? 0.7 : 1
+            }} 
+            onClick={run}
+            disabled={status === 'Running'}
+          >
+            {status === 'Running' ? '処理中...' : '生成する'}
+          </button>
+          {err && (
+            <div style={{color: '#be123c', fontSize: '0.95rem', maxWidth: '100%', wordWrap: 'break-word'}}>
+              {err}
+            </div>
+          )}
         </div>
       </div>
 
