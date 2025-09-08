@@ -69,9 +69,9 @@ export default function Page() {
   useEffect(() => { loadLogs(); }, []);
 
   return (
-    <div style={{maxWidth: '1120px', margin: '0 auto', padding: '20px', background: '#f6f7fb', minHeight: '100vh', fontFamily: 'system-ui, sans-serif'}}>
+    <div style={{maxWidth: '1120px', width: '100%', margin: '0 auto', padding: '20px', background: '#f6f7fb', minHeight: '100vh', fontFamily: 'system-ui, sans-serif', boxSizing: 'border-box'}}>
       {/* Header */}
-      <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem'}}>
+      <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', width: '100%', boxSizing: 'border-box'}}>
         <h1 style={{fontSize: '1.25rem', fontWeight: '600'}}>AI Persona × Cheerio PoC</h1>
         <span style={{
           display: 'inline-flex', alignItems: 'center', borderRadius: '9999px', 
@@ -82,22 +82,22 @@ export default function Page() {
       </div>
 
       {/* Controls */}
-      <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '2rem', marginBottom: '2rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'}}>
-        <div style={{display: 'flex', flexDirection: 'column', gap: '1.5rem'}}>
-          <div>
+      <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '2rem', marginBottom: '2rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)', width: '100%', maxWidth: '100%', boxSizing: 'border-box'}}>
+        <div style={{display: 'flex', flexDirection: 'column', gap: '1.5rem', width: '100%', boxSizing: 'border-box'}}>
+          <div style={{width: '100%', boxSizing: 'border-box'}}>
             <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '1rem'}}>Target URL</label>
             <input
-              style={{width: '100%', borderRadius: '0.75rem', border: '1px solid #d1d5db', padding: '0.75rem 1rem', background: 'white', fontSize: '1rem'}}
+              style={{width: '100%', maxWidth: '100%', borderRadius: '0.75rem', border: '1px solid #d1d5db', padding: '0.75rem 1rem', background: 'white', fontSize: '1rem', boxSizing: 'border-box'}}
               type="url"
               value={url}
               onChange={e => setUrl(e.target.value)}
               placeholder="https://..."
             />
           </div>
-          <div>
+          <div style={{width: '100%', boxSizing: 'border-box'}}>
             <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '1rem'}}>Persona</label>
             <select
-              style={{width: '100%', borderRadius: '0.75rem', border: '1px solid #d1d5db', padding: '0.75rem 1rem', background: 'white', fontSize: '1rem'}}
+              style={{width: '100%', maxWidth: '100%', borderRadius: '0.75rem', border: '1px solid #d1d5db', padding: '0.75rem 1rem', background: 'white', fontSize: '1rem', boxSizing: 'border-box'}}
               value={personaId}
               onChange={e => setPersonaId(e.target.value)}
             >
@@ -117,38 +117,38 @@ export default function Page() {
       </div>
 
       {/* Results */}
-      <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '2rem', marginBottom: '2rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'}}>
+      <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '2rem', marginBottom: '2rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)', width: '100%', maxWidth: '100%', boxSizing: 'border-box'}}>
         <h2 style={{fontSize: '1.25rem', fontWeight: '600', marginBottom: '1.5rem', textAlign: 'center'}}>
           {personas.find(p => p.id === personaId)?.name} が {url} にアクセスした結果
         </h2>
-        <div style={{maxWidth: '100%'}}>
-          <div style={{marginBottom: '2rem'}}>
+        <div style={{width: '100%', maxWidth: '100%', boxSizing: 'border-box'}}>
+          <div style={{marginBottom: '2rem', width: '100%', boxSizing: 'border-box'}}>
             <h2 style={{color: '#374151', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1.1rem'}}>発話</h2>
-            <pre style={{background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', fontSize: '1rem', lineHeight: '1.6', whiteSpace: 'pre-wrap', border: '1px solid #e5e7eb'}}>{data?.llm?.utterance || "-"}</pre>
+            <pre style={{background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', fontSize: '1rem', lineHeight: '1.6', whiteSpace: 'pre-wrap', border: '1px solid #e5e7eb', width: '100%', maxWidth: '100%', boxSizing: 'border-box', overflow: 'hidden', wordWrap: 'break-word'}}>{data?.llm?.utterance || "-"}</pre>
           </div>
 
-          <div style={{marginBottom: '2rem'}}>
+          <div style={{marginBottom: '2rem', width: '100%', boxSizing: 'border-box'}}>
             <h2 style={{color: '#374151', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1.1rem'}}>次アクション</h2>
-            <pre style={{background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', fontSize: '1rem', lineHeight: '1.6', whiteSpace: 'pre-wrap', border: '1px solid #e5e7eb'}}>{data?.llm?.next_action || "-"}</pre>
+            <pre style={{background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', fontSize: '1rem', lineHeight: '1.6', whiteSpace: 'pre-wrap', border: '1px solid #e5e7eb', width: '100%', maxWidth: '100%', boxSizing: 'border-box', overflow: 'hidden', wordWrap: 'break-word'}}>{data?.llm?.next_action || "-"}</pre>
           </div>
 
-          <div style={{marginBottom: '2rem'}}>
+          <div style={{marginBottom: '2rem', width: '100%', boxSizing: 'border-box'}}>
             <h2 style={{color: '#374151', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1.1rem'}}>摩擦スコア</h2>
-            <pre style={{background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', fontSize: '1rem', lineHeight: '1.6', whiteSpace: 'pre-wrap', border: '1px solid #e5e7eb'}}>{data?.llm?.friction_score ?? "-"}</pre>
+            <pre style={{background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', fontSize: '1rem', lineHeight: '1.6', whiteSpace: 'pre-wrap', border: '1px solid #e5e7eb', width: '100%', maxWidth: '100%', boxSizing: 'border-box', overflow: 'hidden', wordWrap: 'break-word'}}>{data?.llm?.friction_score ?? "-"}</pre>
           </div>
         </div>
 
-        <div style={{marginTop: '1.5rem'}}>
+        <div style={{marginTop: '1.5rem', width: '100%', boxSizing: 'border-box'}}>
           <h3 style={{fontWeight: '600', marginBottom: '0.75rem', fontSize: '1.1rem', color: '#374151'}}>可視UIテキスト（抜粋）</h3>
-          <pre style={{maxHeight: '20rem', overflow: 'auto', background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', border: '1px solid #e5e7eb', fontSize: '0.95rem', lineHeight: '1.5'}}>{(data?.ui?.visibleText || []).join("\n") || "-"}</pre>
+          <pre style={{maxHeight: '20rem', overflow: 'auto', background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', border: '1px solid #e5e7eb', fontSize: '0.95rem', lineHeight: '1.5', width: '100%', maxWidth: '100%', boxSizing: 'border-box', wordWrap: 'break-word'}}>{(data?.ui?.visibleText || []).join("\n") || "-"}</pre>
         </div>
       </div>
 
       {/* Logs */}
-      <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '2rem', margin: '0 auto', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'}}>
+      <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '2rem', margin: '0 auto', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)', width: '100%', maxWidth: '100%', boxSizing: 'border-box'}}>
         <h2 style={{fontSize: '1.25rem', fontWeight: '600', marginBottom: '1.5rem'}}>過去ログ（最新20件）</h2>
-        <div style={{overflowX: 'auto'}}>
-          <table style={{width: '100%', fontSize: '0.875rem'}}>
+        <div style={{overflowX: 'auto', width: '100%', maxWidth: '100%', boxSizing: 'border-box'}}>
+          <table style={{width: '100%', minWidth: '600px', fontSize: '0.875rem', borderCollapse: 'collapse', boxSizing: 'border-box'}}>
             <thead>
               <tr>
                 <th>ID</th>
