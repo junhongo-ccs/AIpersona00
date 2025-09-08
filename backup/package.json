@@ -1,0 +1,27 @@
+{
+  "name": "persona-playwright-next",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 5000",
+    "build": "next build && cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.1.2",
+    "next": "^15.5.2",
+    "openai": "^5.19.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "20.19.13",
+    "@types/react": "18.3.24",
+    "@types/react-dom": "^18.3.0",
+    "@types/tailwindcss": "^3.0.11",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
+    "typescript": "5.9.2"
+  }
+}
