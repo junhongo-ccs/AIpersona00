@@ -98,7 +98,10 @@ export default function Page() {
                 boxSizing: 'border-box',
                 height: '3rem',
                 appearance: 'none',
-                outline: 'none'
+                outline: 'none',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap'
               }}
               type="url"
               value={url}
@@ -142,29 +145,29 @@ export default function Page() {
 
       {/* Results */}
       <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '2rem', marginBottom: '2rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)', width: '100%', maxWidth: '100%', boxSizing: 'border-box'}}>
-        <h2 style={{fontSize: '1.25rem', fontWeight: '600', marginBottom: '1.5rem', textAlign: 'center'}}>
+        <h2 style={{fontSize: '1.25rem', fontWeight: '600', marginBottom: '1.5rem', textAlign: 'center', wordWrap: 'break-word', overflowWrap: 'break-word', hyphens: 'auto', maxWidth: '100%'}}>
           {personas.find(p => p.id === personaId)?.name} が {url} にアクセスした結果
         </h2>
         <div style={{width: '100%', maxWidth: '100%', boxSizing: 'border-box'}}>
           <div style={{marginBottom: '2rem', width: '100%', boxSizing: 'border-box'}}>
             <h2 style={{color: '#374151', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1.1rem'}}>発話</h2>
-            <pre style={{background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', fontSize: '1rem', lineHeight: '1.6', whiteSpace: 'pre-wrap', border: '1px solid #e5e7eb', width: '100%', maxWidth: '100%', boxSizing: 'border-box', overflow: 'hidden', wordWrap: 'break-word'}}>{data?.llm?.utterance || "-"}</pre>
+            <pre style={{background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', fontSize: '1rem', lineHeight: '1.6', whiteSpace: 'pre-wrap', border: '1px solid #e5e7eb', width: '100%', maxWidth: '100%', boxSizing: 'border-box', overflow: 'auto', wordWrap: 'break-word', overflowWrap: 'break-word', wordBreak: 'break-all'}}>{data?.llm?.utterance || "-"}</pre>
           </div>
 
           <div style={{marginBottom: '2rem', width: '100%', boxSizing: 'border-box'}}>
             <h2 style={{color: '#374151', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1.1rem'}}>次アクション</h2>
-            <pre style={{background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', fontSize: '1rem', lineHeight: '1.6', whiteSpace: 'pre-wrap', border: '1px solid #e5e7eb', width: '100%', maxWidth: '100%', boxSizing: 'border-box', overflow: 'hidden', wordWrap: 'break-word'}}>{data?.llm?.next_action || "-"}</pre>
+            <pre style={{background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', fontSize: '1rem', lineHeight: '1.6', whiteSpace: 'pre-wrap', border: '1px solid #e5e7eb', width: '100%', maxWidth: '100%', boxSizing: 'border-box', overflow: 'auto', wordWrap: 'break-word', overflowWrap: 'break-word', wordBreak: 'break-all'}}>{data?.llm?.next_action || "-"}</pre>
           </div>
 
           <div style={{marginBottom: '2rem', width: '100%', boxSizing: 'border-box'}}>
             <h2 style={{color: '#374151', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1.1rem'}}>摩擦スコア</h2>
-            <pre style={{background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', fontSize: '1rem', lineHeight: '1.6', whiteSpace: 'pre-wrap', border: '1px solid #e5e7eb', width: '100%', maxWidth: '100%', boxSizing: 'border-box', overflow: 'hidden', wordWrap: 'break-word'}}>{data?.llm?.friction_score ?? "-"}</pre>
+            <pre style={{background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', fontSize: '1rem', lineHeight: '1.6', whiteSpace: 'pre-wrap', border: '1px solid #e5e7eb', width: '100%', maxWidth: '100%', boxSizing: 'border-box', overflow: 'auto', wordWrap: 'break-word', overflowWrap: 'break-word', wordBreak: 'break-all'}}>{data?.llm?.friction_score ?? "-"}</pre>
           </div>
         </div>
 
         <div style={{marginTop: '1.5rem', width: '100%', boxSizing: 'border-box'}}>
           <h3 style={{fontWeight: '600', marginBottom: '0.75rem', fontSize: '1.1rem', color: '#374151'}}>可視UIテキスト（抜粋）</h3>
-          <pre style={{maxHeight: '20rem', overflow: 'auto', background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', border: '1px solid #e5e7eb', fontSize: '0.95rem', lineHeight: '1.5', width: '100%', maxWidth: '100%', boxSizing: 'border-box', wordWrap: 'break-word'}}>{(data?.ui?.visibleText || []).join("\n") || "-"}</pre>
+          <pre style={{maxHeight: '20rem', overflow: 'auto', background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', border: '1px solid #e5e7eb', fontSize: '0.95rem', lineHeight: '1.5', width: '100%', maxWidth: '100%', boxSizing: 'border-box', wordWrap: 'break-word', overflowWrap: 'break-word', wordBreak: 'break-all', whiteSpace: 'pre-wrap'}}>{(data?.ui?.visibleText || []).join("\n") || "-"}</pre>
         </div>
       </div>
 
@@ -189,10 +192,10 @@ export default function Page() {
                   <td style={{borderBottom: '1px solid #e5e7eb', padding: '0.5rem 0.75rem 0.5rem 0', textAlign: 'left', verticalAlign: 'top'}}>{r.id}</td>
                   <td style={{borderBottom: '1px solid #e5e7eb', padding: '0.5rem 0.75rem 0.5rem 0', textAlign: 'left', verticalAlign: 'top'}}>{new Date(r.timestamp).toLocaleString()}</td>
                   <td style={{borderBottom: '1px solid #e5e7eb', padding: '0.5rem 0.75rem 0.5rem 0', textAlign: 'left', verticalAlign: 'top', fontWeight: '600', color: '#4f46e5'}}>{r.persona}</td>
-                  <td style={{borderBottom: '1px solid #e5e7eb', padding: '0.5rem 0.75rem 0.5rem 0', textAlign: 'left', verticalAlign: 'top', whiteSpace: 'nowrap', color: '#2563eb', textDecoration: 'underline'}} title={r.url}>
-                    <a href={r.url} target="_blank" rel="noopener noreferrer">{r.url}</a>
+                  <td style={{borderBottom: '1px solid #e5e7eb', padding: '0.5rem 0.75rem 0.5rem 0', textAlign: 'left', verticalAlign: 'top', maxWidth: '200px', wordWrap: 'break-word', overflowWrap: 'break-word', wordBreak: 'break-all', color: '#2563eb', textDecoration: 'underline'}} title={r.url}>
+                    <a href={r.url} target="_blank" rel="noopener noreferrer" style={{wordWrap: 'break-word', overflowWrap: 'break-word', wordBreak: 'break-all'}}>{r.url}</a>
                   </td>
-                  <td style={{borderBottom: '1px solid #e5e7eb', padding: '0.5rem 0.75rem 0.5rem 0', textAlign: 'left', verticalAlign: 'top', whiteSpace: 'nowrap'}} title={r.utterance}>{r.utterance}</td>
+                  <td style={{borderBottom: '1px solid #e5e7eb', padding: '0.5rem 0.75rem 0.5rem 0', textAlign: 'left', verticalAlign: 'top', maxWidth: '300px', wordWrap: 'break-word', overflowWrap: 'break-word', wordBreak: 'break-all'}} title={r.utterance}>{r.utterance}</td>
                   <td style={{borderBottom: '1px solid #e5e7eb', padding: '0.5rem 0.75rem 0.5rem 0', textAlign: 'left', verticalAlign: 'top'}}>{r.friction_score}</td>
                 </tr>
               ))}
