@@ -24,7 +24,7 @@ type LogRow = {
 
 export default function Page() {
   const [url, setUrl] = useState("https://example.com");
-  const [personaId, setPersonaId] = useState(personas[0].id);
+  const [personaId, setPersonaId] = useState(personas[0]?.id || "novice-50s");
   const [status, setStatus] = useState<"Idle"|"Running"|"Done"|"Error">("Idle");
   const [err, setErr] = useState<string>("");
   const [data, setData] = useState<RunResp | null>(null);
@@ -50,22 +50,17 @@ export default function Page() {
     setStatus("Running");
     setData(null);
     try {
-      console.log("Making request to /api/run with:", { url, personaId });
       const res = await fetch("/api/run", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url, personaId })
       });
-      console.log("Response status:", res.status);
       const j: RunResp = await res.json();
-      console.log("Response data:", j);
       if (!res.ok) throw new Error(j.error || "failed");
       setData(j);
       setStatus("Done");
       await loadLogs();
-      console.log("Data set successfully:", j);
     } catch (e: any) {
-      console.error("Error in run function:", e);
       setErr(String(e?.message || e));
       setStatus("Error");
     }
@@ -135,7 +130,7 @@ export default function Page() {
             >
               {personas.map(p => (
                 <option key={p.id} value={p.id}>
-                  {p.name} — {p.traits.join(" / ")}
+                  {p.name} — {Array.isArray(p.traits) ? p.traits.join(" / ") : String(p.traits || "")}
                 </option>
               ))}
             </select>
@@ -151,10 +146,7 @@ export default function Page() {
       {/* Results */}
       <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '2rem', marginBottom: '2rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)', width: '100%', maxWidth: '100%', boxSizing: 'border-box'}}>
         <h2 style={{fontSize: '1.25rem', fontWeight: '600', marginBottom: '1.5rem', textAlign: 'center', wordWrap: 'break-word', overflowWrap: 'break-word', hyphens: 'auto', maxWidth: '100%'}}>
-          {personas.find(p => p.id === personaId)?.name} が {url} にアクセスした結果
-          <div style={{fontSize: '0.8rem', color: '#666', marginTop: '0.5rem'}}>
-            データ状態: {data ? '有り' : 'なし'} | Status: {status}
-          </div>
+          {personas.find(p => p.id === personaId)?.name || "Unknown Persona"} が {url} にアクセスした結果
         </h2>
         <div style={{width: '100%', maxWidth: '100%', boxSizing: 'border-box'}}>
           <div style={{marginBottom: '2rem', width: '100%', boxSizing: 'border-box'}}>
