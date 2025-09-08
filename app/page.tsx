@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { personas, type ExtendedPersona } from "@/lib/personas";
+import { personas } from "@/lib/personas";
 
 type RunResp = {
   status: string;
@@ -130,7 +130,7 @@ export default function Page() {
             >
               {personas.map(p => (
                 <option key={p.id} value={p.id}>
-                  {p.name} — {Array.isArray(p.traits) ? p.traits.join(" / ") : String(p.traits || "")}
+                  {p.name} — {p.traits.join(" / ")}
                 </option>
               ))}
             </select>
