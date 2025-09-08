@@ -1,7 +1,6 @@
 // ==== RUN API (Cheerioベース) ====
 // Playwrightを使わず、HTMLを fetch + cheerio で要約して LLM に投げます。
 
-
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import * as cheerio from "cheerio";
@@ -18,7 +17,10 @@ export async function POST(req: NextRequest) {
     const personaId: string | undefined = body?.personaId;
 
     if (!/^https?:\/\//.test(url)) {
-      return NextResponse.json({ error: "URLが不正です（http/https必須）" }, { status: 400 });
+      return NextResponse.json(
+        { error: "URLが不正です（http/https必須）" },
+        { status: 400 },
+      );
     }
 
     const persona = personas.find((p) => p.id === personaId) ?? personas[0];
@@ -30,56 +32,76 @@ export async function POST(req: NextRequest) {
 
     const title = ($("title").first().text() || "").trim();
     const headings = ["h1", "h2", "h3"]
-      .flatMap((sel) => $(sel).map((_, el) => $(el).text().trim()).get())
+      .flatMap((sel) =>
+        $(sel)
+          .map((_, el) => $(el).text().trim())
+          .get(),
+      )
       .filter(Boolean)
       .slice(0, 14);
 
     const actions = $("button,a[role='button'],a[href]")
-      .map((_, el) => ($(el).text().trim() || $(el).attr("aria-label") || "").trim())
+      .map((_, el) =>
+        ($(el).text().trim() || $(el).attr("aria-label") || "").trim(),
+      )
       .get()
       .filter(Boolean)
       .slice(0, 20);
 
     const fields = $("input,textarea,select")
       .map((_, el) =>
-        ($(el).attr("placeholder") ||
+        (
+          $(el).attr("placeholder") ||
           $(el).attr("aria-label") ||
           $(el).attr("name") ||
-          "")
-          .trim()
+          ""
+        ).trim(),
       )
       .get()
       .filter(Boolean)
       .slice(0, 20);
 
     const uiSummary: string[] = [
-      ...(title ? [`[title] ${title}`] : []),
-      ...headings.map((t) => `[heading] ${t}`),
-      ...actions.map((t) => `[action] ${t}`),
-      ...fields.map((t) => `[field] ${t}`),
+      ...(title ? [`[タイトル] ${title}`] : []),
+      ...headings.map((t) => `[見出し] ${t}`),
+      ...actions.map((t) => `[アクション] ${t}`),
+      ...fields.map((t) => `[入力欄] ${t}`),
     ].slice(0, 120);
 
     const meta = { url, title, viewport: { w: 0, h: 0 }, scrollY: 0 };
 
     // 2) プロンプト
     const prompt = `
-あなたは次のペルソナになりきり、画面の要約を見て「発話法」で短く独り言を述べます。
-- 1〜3文、要約中の語句を引用
-- 最後に「次アクション」1行と「摩擦(0-3)」を返す
+    あなたは次のペルソナになりきり、画面の要約を見て「発話法」で短く独り言を述べます。
+    - 1〜3文、要約中の語句を引用
+    - 最後に「次アクション」1行と「摩擦(0-3)」を返す
 
-[Persona]
-name: ${persona.name}
-traits: ${Array.isArray(persona.traits) ? persona.traits.join(", ") : ""}
-goal: ${persona.goal}
+    [Persona]
+    name: ${persona.name}
+    traits: ${Array.isArray(persona.traits) ? persona.traits.join(", ") : ""}
+    goal: ${persona.goal}
 
-[UI summary]
-${uiSummary.join("\n")}
+    [UI summary]
+    ${uiSummary.join("\n")}
 
-出力形式（先頭語を厳守）:
-発話: <短文1-3>
-次アクション: <1行>
-摩擦: <0|1|2|3>
-`.trim();
+    [摩擦スコアの判断ガイドライン]
+    摩擦スコア(0-3)を決める際は、以下を総合的に考慮してください：
+    - 0: スムーズに操作でき、迷いがない
+    - 1: 少し考えるが、自力で進められる
+    - 2: 困惑や不安を感じ、時間がかかる
+    - 3: 操作を諦めたくなる、助けが必要
+
+    考慮すべき観点：
+    - このペルソナにとっての認知的負荷
+    - 目標達成までの障壁の高さ
+    - 感情的なフラストレーション
+    - UIの複雑さとペルソナ特性の相性
+
+    出力形式（先頭語を厳守）:
+    発話: <短文1-3>
+    次アクション: <1行>
+    摩擦: <0|1|2|3>
+    `.trim();
 
     // 3) OpenAI（未設定ならダミーで返す）
     let utterance = "";
@@ -96,29 +118,47 @@ ${uiSummary.join("\n")}
       });
       raw = (completion.choices?.[0]?.message?.content || "").trim();
       utterance = (raw.match(/発話[:：]\s*(.+)/)?.[1] || raw).slice(0, 800);
-      nextAction = (raw.match(/次アクション[:：]\s*(.+)/)?.[1] || "").slice(0, 200);
+      nextAction = (raw.match(/次アクション[:：]\s*(.+)/)?.[1] || "").slice(
+        0,
+        200,
+      );
       const n = parseInt(raw.match(/摩擦[:：]\s*(\d)/)?.[1] || "1", 10);
       friction = Number.isFinite(n) ? n : 1;
     } else {
-      utterance = "（ダミー）見出しとボタンは把握できるが、入力の説明は少し不足。";
+      utterance =
+        "（ダミー）見出しとボタンは把握できるが、入力の説明は少し不足。";
       nextAction = "必要項目を入力して ‘送信’ を押す";
       friction = 1;
       raw = "";
     }
 
     // 4) ログ保存（JSON版のinsertLogを想定）
-    insertLog({ persona: persona.id, url, utterance, next_action: nextAction, friction_score: friction });
+    insertLog({
+      persona: persona.id,
+      url,
+      utterance,
+      next_action: nextAction,
+      friction_score: friction,
+    });
 
     // 5) レスポンス（スクショは無し）
     return NextResponse.json({
       status: "done",
       meta,
       artifactPaths: { screenshot: "" },
-      screenshotDataUrl: "",               // 画像がない前提で空
+      screenshotDataUrl: "", // 画像がない前提で空
       ui: { visibleText: uiSummary },
-      llm: { utterance, next_action: nextAction, friction_score: friction, raw }
+      llm: {
+        utterance,
+        next_action: nextAction,
+        friction_score: friction,
+        raw,
+      },
     });
   } catch (e: any) {
-    return NextResponse.json({ error: String(e?.message || e) }, { status: 500 });
+    return NextResponse.json(
+      { error: String(e?.message || e) },
+      { status: 500 },
+    );
   }
 }
