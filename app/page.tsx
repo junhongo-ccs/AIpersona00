@@ -87,7 +87,19 @@ export default function Page() {
           <div style={{width: '100%', boxSizing: 'border-box'}}>
             <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '1rem'}}>Target URL</label>
             <input
-              style={{width: '100%', maxWidth: '100%', borderRadius: '0.75rem', border: '1px solid #d1d5db', padding: '0.75rem 1rem', background: 'white', fontSize: '1rem', boxSizing: 'border-box'}}
+              style={{
+                width: '100%', 
+                maxWidth: '100%', 
+                borderRadius: '0.75rem', 
+                border: '1px solid #d1d5db', 
+                padding: '0.75rem 1rem', 
+                background: 'white', 
+                fontSize: '1rem', 
+                boxSizing: 'border-box',
+                height: '3rem',
+                appearance: 'none',
+                outline: 'none'
+              }}
               type="url"
               value={url}
               onChange={e => setUrl(e.target.value)}
@@ -97,7 +109,19 @@ export default function Page() {
           <div style={{width: '100%', boxSizing: 'border-box'}}>
             <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '1rem'}}>Persona</label>
             <select
-              style={{width: '100%', maxWidth: '100%', borderRadius: '0.75rem', border: '1px solid #d1d5db', padding: '0.75rem 1rem', background: 'white', fontSize: '1rem', boxSizing: 'border-box'}}
+              style={{
+                width: '100%', 
+                maxWidth: '100%', 
+                borderRadius: '0.75rem', 
+                border: '1px solid #d1d5db', 
+                padding: '0.75rem 1rem', 
+                background: 'white', 
+                fontSize: '1rem', 
+                boxSizing: 'border-box',
+                height: '3rem',
+                appearance: 'none',
+                outline: 'none'
+              }}
               value={personaId}
               onChange={e => setPersonaId(e.target.value)}
             >
