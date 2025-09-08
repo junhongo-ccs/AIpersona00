@@ -1,6 +1,6 @@
 const nextConfig = {
   reactStrictMode: true,
-  output: 'standalone',
+  output: "standalone",
   // Replitでのビルド時のメモリ制限対策
   webpack: (config, { isServer }) => {
     config.optimization = {
@@ -12,9 +12,9 @@ const nextConfig = {
   // 静的ファイルのコピー設定
   experimental: {
     outputFileTracingIncludes: {
-      '/api/*': ['./node_modules/**/*'],
+      "/api/*": ["./node_modules/**/*"],
     },
-  }
+  },
 };
 
 module.exports = nextConfig;
