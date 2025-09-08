@@ -5,12 +5,13 @@ This is a Next.js application that simulates AI personas interacting with web pa
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
+Styling preference: Plain CSS/inline styles - no Tailwind CSS (causes parsing issues)
 
 # System Architecture
 
 ## Frontend Architecture
-- **Framework**: Next.js 14 with App Router and TypeScript
-- **Styling**: Tailwind CSS with custom utility classes and design tokens
+- **Framework**: Next.js 15 with App Router and TypeScript
+- **Styling**: Plain CSS and inline styles (Tailwind removed due to compatibility issues)
 - **State Management**: React hooks (useState, useEffect) for local component state
 - **UI Pattern**: Single-page application with real-time status updates and data fetching
 

@@ -69,20 +69,25 @@ export default function Page() {
   useEffect(() => { loadLogs(); }, []);
 
   return (
-    <div className="container space-y-6">
+    <div style={{maxWidth: '1120px', margin: '0 auto', padding: '20px', background: '#f6f7fb', minHeight: '100vh', fontFamily: 'system-ui, sans-serif'}}>
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">AI Persona × Cheerio PoC</h1>
-        <span className={badgeClass}>{status}</span>
+      <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem'}}>
+        <h1 style={{fontSize: '1.25rem', fontWeight: '600'}}>AI Persona × Cheerio PoC</h1>
+        <span style={{
+          display: 'inline-flex', alignItems: 'center', borderRadius: '9999px', 
+          padding: '0.25rem 0.625rem', fontSize: '0.75rem', fontWeight: '500',
+          backgroundColor: status === 'Idle' ? '#e5e7eb' : status === 'Running' ? '#fef3c7' : status === 'Done' ? '#d1fae5' : '#ffe4e6',
+          color: status === 'Idle' ? '#374151' : status === 'Running' ? '#92400e' : status === 'Done' ? '#065f46' : '#9f1239'
+        }}>{status}</span>
       </div>
 
       {/* Controls */}
-      <div className="card p-5">
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="md:col-span-2">
-            <label className="block mb-1 font-medium">Target URL</label>
+      <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '1.25rem', marginBottom: '1.5rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'}}>
+        <div style={{display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(3, 1fr)'}}>
+          <div style={{gridColumn: 'span 2 / span 2'}}>
+            <label style={{display: 'block', marginBottom: '0.25rem', fontWeight: '500'}}>Target URL</label>
             <input
-              className="input"
+              style={{width: '100%', borderRadius: '0.75rem', border: '1px solid #d1d5db', padding: '0.5rem 0.75rem', background: 'white'}}
               type="url"
               value={url}
               onChange={e => setUrl(e.target.value)}
@@ -90,9 +95,9 @@ export default function Page() {
             />
           </div>
           <div>
-            <label className="block mb-1 font-medium">Persona</label>
+            <label style={{display: 'block', marginBottom: '0.25rem', fontWeight: '500'}}>Persona</label>
             <select
-              className="select"
+              style={{width: '100%', borderRadius: '0.75rem', border: '1px solid #d1d5db', padding: '0.5rem 0.75rem', background: 'white'}}
               value={personaId}
               onChange={e => setPersonaId(e.target.value)}
             >
@@ -105,45 +110,45 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="mt-4 flex gap-3">
-          <button className="btn btn-primary" onClick={run}>Run</button>
-          {err && <div className="text-rose-700">{err}</div>}
+        <div style={{marginTop: '1rem', display: 'flex', gap: '0.75rem'}}>
+          <button style={{display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: '0.75rem', padding: '0.5rem 1rem', fontWeight: '500', background: '#111213', color: 'white', border: 'none', cursor: 'pointer'}} onClick={run}>Run</button>
+          {err && <div style={{color: '#be123c'}}>{err}</div>}
         </div>
       </div>
 
       {/* Results */}
-      <div className="card p-5">
-        <h2 className="text-lg font-semibold mb-3">
+      <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '1.25rem', marginBottom: '1.5rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'}}>
+        <h2 style={{fontSize: '1.125rem', fontWeight: '600', marginBottom: '0.75rem'}}>
           {personas.find(p => p.id === personaId)?.name} が {url} にアクセスした結果
         </h2>
-        <div className="max-w-3xl mx-auto space-y-6">
-          <div>
-            <h2 className="text-gray-500 font-semibold mb-1">発話</h2>
-            <pre className="bg-gray-50 p-2 rounded">{data?.llm?.utterance || "-"}</pre>
+        <div style={{maxWidth: '48rem', margin: '0 auto'}}>
+          <div style={{marginBottom: '1.5rem'}}>
+            <h2 style={{color: '#6b7280', fontWeight: '600', marginBottom: '0.25rem'}}>発話</h2>
+            <pre style={{background: '#f9fafb', padding: '0.5rem', borderRadius: '0.25rem'}}>{data?.llm?.utterance || "-"}</pre>
           </div>
 
-          <div>
-            <h2 className="text-gray-500 font-semibold mb-1">次アクション</h2>
-            <pre className="bg-gray-50 p-2 rounded">{data?.llm?.next_action || "-"}</pre>
+          <div style={{marginBottom: '1.5rem'}}>
+            <h2 style={{color: '#6b7280', fontWeight: '600', marginBottom: '0.25rem'}}>次アクション</h2>
+            <pre style={{background: '#f9fafb', padding: '0.5rem', borderRadius: '0.25rem'}}>{data?.llm?.next_action || "-"}</pre>
           </div>
 
-          <div>
-            <h2 className="text-gray-500 font-semibold mb-1">摩擦スコア</h2>
-            <pre className="bg-gray-50 p-2 rounded">{data?.llm?.friction_score ?? "-"}</pre>
+          <div style={{marginBottom: '1.5rem'}}>
+            <h2 style={{color: '#6b7280', fontWeight: '600', marginBottom: '0.25rem'}}>摩擦スコア</h2>
+            <pre style={{background: '#f9fafb', padding: '0.5rem', borderRadius: '0.25rem'}}>{data?.llm?.friction_score ?? "-"}</pre>
           </div>
         </div>
 
-        <div className="mt-4">
-          <h3 className="font-medium mb-2">可視UIテキスト（抜粋）</h3>
-          <pre className="scroll">{(data?.ui?.visibleText || []).join("\n") || "-"}</pre>
+        <div style={{marginTop: '1rem'}}>
+          <h3 style={{fontWeight: '500', marginBottom: '0.5rem'}}>可視UIテキスト（抜粋）</h3>
+          <pre style={{maxHeight: '16rem', overflow: 'auto', background: '#f9fafb', padding: '0.75rem', borderRadius: '0.75rem', border: '1px solid #e5e7eb'}}>{(data?.ui?.visibleText || []).join("\n") || "-"}</pre>
         </div>
       </div>
 
       {/* Logs */}
-      <div className="card p-5 max-w-6xl mx-auto">
-        <h2 className="text-lg font-semibold mb-3">過去ログ（最新20件）</h2>
-        <div className="overflow-x-auto">
-          <table className="table w-full text-sm">
+      <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '1.25rem', maxWidth: '72rem', margin: '0 auto', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'}}>
+        <h2 style={{fontSize: '1.125rem', fontWeight: '600', marginBottom: '0.75rem'}}>過去ログ（最新20件）</h2>
+        <div style={{overflowX: 'auto'}}>
+          <table style={{width: '100%', fontSize: '0.875rem'}}>
             <thead>
               <tr>
                 <th>ID</th>
@@ -157,19 +162,19 @@ export default function Page() {
             <tbody>
               {logs.map(r => (
                 <tr key={r.id}>
-                  <td>{r.id}</td>
-                  <td>{new Date(r.timestamp).toLocaleString()}</td>
-                  <td className="font-semibold text-indigo-600">{r.persona}</td>
-                  <td className="whitespace-nowrap text-blue-600 underline" title={r.url}>
+                  <td style={{borderBottom: '1px solid #e5e7eb', padding: '0.5rem 0.75rem 0.5rem 0', textAlign: 'left', verticalAlign: 'top'}}>{r.id}</td>
+                  <td style={{borderBottom: '1px solid #e5e7eb', padding: '0.5rem 0.75rem 0.5rem 0', textAlign: 'left', verticalAlign: 'top'}}>{new Date(r.timestamp).toLocaleString()}</td>
+                  <td style={{borderBottom: '1px solid #e5e7eb', padding: '0.5rem 0.75rem 0.5rem 0', textAlign: 'left', verticalAlign: 'top', fontWeight: '600', color: '#4f46e5'}}>{r.persona}</td>
+                  <td style={{borderBottom: '1px solid #e5e7eb', padding: '0.5rem 0.75rem 0.5rem 0', textAlign: 'left', verticalAlign: 'top', whiteSpace: 'nowrap', color: '#2563eb', textDecoration: 'underline'}} title={r.url}>
                     <a href={r.url} target="_blank" rel="noopener noreferrer">{r.url}</a>
                   </td>
-                  <td className="whitespace-nowrap" title={r.utterance}>{r.utterance}</td>
-                  <td>{r.friction_score}</td>
+                  <td style={{borderBottom: '1px solid #e5e7eb', padding: '0.5rem 0.75rem 0.5rem 0', textAlign: 'left', verticalAlign: 'top', whiteSpace: 'nowrap'}} title={r.utterance}>{r.utterance}</td>
+                  <td style={{borderBottom: '1px solid #e5e7eb', padding: '0.5rem 0.75rem 0.5rem 0', textAlign: 'left', verticalAlign: 'top'}}>{r.friction_score}</td>
                 </tr>
               ))}
               {!logs.length && (
                 <tr>
-                  <td colSpan={6} className="text-gray-500">No logs yet.</td>
+                  <td colSpan={6} style={{borderBottom: '1px solid #e5e7eb', padding: '0.5rem 0.75rem 0.5rem 0', textAlign: 'left', verticalAlign: 'top', color: '#6b7280'}}>No logs yet.</td>
                 </tr>
               )}
             </tbody>
