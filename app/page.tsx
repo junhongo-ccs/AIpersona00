@@ -135,7 +135,7 @@ export default function Page() {
         </div>
 
         <div style={{marginTop: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center'}}>
-          <button style={{display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: '0.75rem', padding: '0.75rem 1.5rem', fontWeight: '500', background: '#111213', color: 'white', border: 'none', cursor: 'pointer', fontSize: '1rem'}} onClick={run}>Run</button>
+          <button style={{display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: '0.75rem', padding: '0.75rem 1.5rem', fontWeight: '500', background: '#111213', color: 'white', border: 'none', cursor: 'pointer', fontSize: '1rem'}} onClick={run}>生成する</button>
           {err && <div style={{color: '#be123c', fontSize: '0.95rem'}}>{err}</div>}
         </div>
       </div>
