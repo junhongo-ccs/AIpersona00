@@ -23,5 +23,17 @@ export const personas: Persona[] = [
     name: "Sato (44)",
     traits: ["視力が弱め", "コントラスト重視", "読み上げも使う"],
     goal: "確実に内容を理解して操作する"
+  },
+  {
+    id: "elderly-70s",
+    name: "Yamada (73)",
+    traits: ["技術恐怖症", "記憶に不安", "孫に教わりながら"],
+    goal: "家族と連絡を取れるようになる"
+  },
+  {
+    id: "teen-digital",
+    name: "Yuki (16)",
+    traits: ["デジタルネイティブ", "飽きっぽい", "SNS世代"],
+    goal: "面白い動画を素早く見つける"
   }
 ];
