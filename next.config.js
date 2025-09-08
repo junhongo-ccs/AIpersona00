@@ -1,9 +1,19 @@
 const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
+  // Replitでのビルド時のメモリ制限対策
+  webpack: (config, { isServer }) => {
+    config.optimization = {
+      ...config.optimization,
+      minimize: !isServer,
+    };
+    return config;
+  },
+  // 静的ファイルのコピー設定
   experimental: {
-    // Server components external packages for database compatibility
-    serverComponentsExternalPackages: ["better-sqlite3"]
+    outputFileTracingIncludes: {
+      '/api/*': ['./node_modules/**/*'],
+    },
   }
 };
 

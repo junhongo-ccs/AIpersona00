@@ -15,12 +15,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": [
-        "*"
+        "./*"
       ]
     },
-    "types": [
-      "node"
-    ],
     "allowJs": true,
     "skipLibCheck": true,
     "incremental": true,
@@ -30,7 +27,8 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "next-env.d.ts",
@@ -39,6 +37,8 @@
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".next",
+    "out"
   ]
 }
