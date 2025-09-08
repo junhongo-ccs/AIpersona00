@@ -82,12 +82,12 @@ export default function Page() {
       </div>
 
       {/* Controls */}
-      <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '1.25rem', marginBottom: '1.5rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'}}>
-        <div style={{display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(3, 1fr)'}}>
-          <div style={{gridColumn: 'span 2 / span 2'}}>
-            <label style={{display: 'block', marginBottom: '0.25rem', fontWeight: '500'}}>Target URL</label>
+      <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '2rem', marginBottom: '2rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'}}>
+        <div style={{display: 'flex', flexDirection: 'column', gap: '1.5rem'}}>
+          <div>
+            <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '1rem'}}>Target URL</label>
             <input
-              style={{width: '100%', borderRadius: '0.75rem', border: '1px solid #d1d5db', padding: '0.5rem 0.75rem', background: 'white'}}
+              style={{width: '100%', borderRadius: '0.75rem', border: '1px solid #d1d5db', padding: '0.75rem 1rem', background: 'white', fontSize: '1rem'}}
               type="url"
               value={url}
               onChange={e => setUrl(e.target.value)}
@@ -95,9 +95,9 @@ export default function Page() {
             />
           </div>
           <div>
-            <label style={{display: 'block', marginBottom: '0.25rem', fontWeight: '500'}}>Persona</label>
+            <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '1rem'}}>Persona</label>
             <select
-              style={{width: '100%', borderRadius: '0.75rem', border: '1px solid #d1d5db', padding: '0.5rem 0.75rem', background: 'white'}}
+              style={{width: '100%', borderRadius: '0.75rem', border: '1px solid #d1d5db', padding: '0.75rem 1rem', background: 'white', fontSize: '1rem'}}
               value={personaId}
               onChange={e => setPersonaId(e.target.value)}
             >
@@ -110,43 +110,43 @@ export default function Page() {
           </div>
         </div>
 
-        <div style={{marginTop: '1rem', display: 'flex', gap: '0.75rem'}}>
-          <button style={{display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: '0.75rem', padding: '0.5rem 1rem', fontWeight: '500', background: '#111213', color: 'white', border: 'none', cursor: 'pointer'}} onClick={run}>Run</button>
-          {err && <div style={{color: '#be123c'}}>{err}</div>}
+        <div style={{marginTop: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center'}}>
+          <button style={{display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: '0.75rem', padding: '0.75rem 1.5rem', fontWeight: '500', background: '#111213', color: 'white', border: 'none', cursor: 'pointer', fontSize: '1rem'}} onClick={run}>Run</button>
+          {err && <div style={{color: '#be123c', fontSize: '0.95rem'}}>{err}</div>}
         </div>
       </div>
 
       {/* Results */}
-      <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '1.25rem', marginBottom: '1.5rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'}}>
-        <h2 style={{fontSize: '1.125rem', fontWeight: '600', marginBottom: '0.75rem'}}>
+      <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '2rem', marginBottom: '2rem', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'}}>
+        <h2 style={{fontSize: '1.25rem', fontWeight: '600', marginBottom: '1.5rem', textAlign: 'center'}}>
           {personas.find(p => p.id === personaId)?.name} が {url} にアクセスした結果
         </h2>
-        <div style={{maxWidth: '48rem', margin: '0 auto'}}>
-          <div style={{marginBottom: '1.5rem'}}>
-            <h2 style={{color: '#6b7280', fontWeight: '600', marginBottom: '0.25rem'}}>発話</h2>
-            <pre style={{background: '#f9fafb', padding: '0.5rem', borderRadius: '0.25rem'}}>{data?.llm?.utterance || "-"}</pre>
+        <div style={{maxWidth: '100%'}}>
+          <div style={{marginBottom: '2rem'}}>
+            <h2 style={{color: '#374151', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1.1rem'}}>発話</h2>
+            <pre style={{background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', fontSize: '1rem', lineHeight: '1.6', whiteSpace: 'pre-wrap', border: '1px solid #e5e7eb'}}>{data?.llm?.utterance || "-"}</pre>
           </div>
 
-          <div style={{marginBottom: '1.5rem'}}>
-            <h2 style={{color: '#6b7280', fontWeight: '600', marginBottom: '0.25rem'}}>次アクション</h2>
-            <pre style={{background: '#f9fafb', padding: '0.5rem', borderRadius: '0.25rem'}}>{data?.llm?.next_action || "-"}</pre>
+          <div style={{marginBottom: '2rem'}}>
+            <h2 style={{color: '#374151', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1.1rem'}}>次アクション</h2>
+            <pre style={{background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', fontSize: '1rem', lineHeight: '1.6', whiteSpace: 'pre-wrap', border: '1px solid #e5e7eb'}}>{data?.llm?.next_action || "-"}</pre>
           </div>
 
-          <div style={{marginBottom: '1.5rem'}}>
-            <h2 style={{color: '#6b7280', fontWeight: '600', marginBottom: '0.25rem'}}>摩擦スコア</h2>
-            <pre style={{background: '#f9fafb', padding: '0.5rem', borderRadius: '0.25rem'}}>{data?.llm?.friction_score ?? "-"}</pre>
+          <div style={{marginBottom: '2rem'}}>
+            <h2 style={{color: '#374151', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1.1rem'}}>摩擦スコア</h2>
+            <pre style={{background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', fontSize: '1rem', lineHeight: '1.6', whiteSpace: 'pre-wrap', border: '1px solid #e5e7eb'}}>{data?.llm?.friction_score ?? "-"}</pre>
           </div>
         </div>
 
-        <div style={{marginTop: '1rem'}}>
-          <h3 style={{fontWeight: '500', marginBottom: '0.5rem'}}>可視UIテキスト（抜粋）</h3>
-          <pre style={{maxHeight: '16rem', overflow: 'auto', background: '#f9fafb', padding: '0.75rem', borderRadius: '0.75rem', border: '1px solid #e5e7eb'}}>{(data?.ui?.visibleText || []).join("\n") || "-"}</pre>
+        <div style={{marginTop: '1.5rem'}}>
+          <h3 style={{fontWeight: '600', marginBottom: '0.75rem', fontSize: '1.1rem', color: '#374151'}}>可視UIテキスト（抜粋）</h3>
+          <pre style={{maxHeight: '20rem', overflow: 'auto', background: '#f9fafb', padding: '1.5rem', borderRadius: '0.75rem', border: '1px solid #e5e7eb', fontSize: '0.95rem', lineHeight: '1.5'}}>{(data?.ui?.visibleText || []).join("\n") || "-"}</pre>
         </div>
       </div>
 
       {/* Logs */}
-      <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '1.25rem', maxWidth: '72rem', margin: '0 auto', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'}}>
-        <h2 style={{fontSize: '1.125rem', fontWeight: '600', marginBottom: '0.75rem'}}>過去ログ（最新20件）</h2>
+      <div style={{background: 'white', border: '1px solid #e5e7eb', borderRadius: '1rem', padding: '2rem', margin: '0 auto', boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'}}>
+        <h2 style={{fontSize: '1.25rem', fontWeight: '600', marginBottom: '1.5rem'}}>過去ログ（最新20件）</h2>
         <div style={{overflowX: 'auto'}}>
           <table style={{width: '100%', fontSize: '0.875rem'}}>
             <thead>
